@@ -30,17 +30,25 @@ const deck = {
  }
 }
 
-buildGame();
-
 // Build Game
 function buildGame(){
   // Shuffle game deck
   deck.cards = deck.shuffle(deck.cards);
 
-  // array containing all card elements
+  // Add classes and eventListeners
   var cards = $(".card");
   for(var i = 0; i < cards.length; i++){
     cards[i].className = "card hidden"
     cards[i].innerHTML = "<i class=\"fa fa-" + deck.cards[i] + "\"></i>"
+
+    cards[i].addEventListener('click', function(e){
+      revealCard(e.target);
+    });
   }
 }
+
+function revealCard(element){
+  element.className = "card revealed";
+}
+
+buildGame();
