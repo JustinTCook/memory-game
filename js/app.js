@@ -103,6 +103,10 @@ function checkMatch(){
     hidePair();
 
   handleRating();
+
+  var targeted_popup_class = 'popup-1';
+  console.log(targeted_popup_class);
+  $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
 }
 
 function handleRating(){
@@ -143,8 +147,8 @@ function hidePair(){
 
 function checkWinCondition(){
   if(deck.matched.length == 16){
-    console.log("You win!");
     stopInterval();
+    console.log("You win!");
   }
 }
 
@@ -166,5 +170,24 @@ function startInterval(){
 function stopInterval(){
     clearInterval(timer);
 }
+
+$(function() {
+    //----- OPEN
+    $('[data-popup-open]').on('click', function(e)  {
+        var targeted_popup_class = 'popup-1';
+        console.log(targeted_popup_class);
+        $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+
+        e.preventDefault();
+    });
+
+    //----- CLOSE
+    $('[data-popup-close]').on('click', function(e)  {
+        var targeted_popup_class = jQuery(this).attr('data-popup-close');
+        $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+
+        e.preventDefault();
+    });
+});
 
 buildGame();
