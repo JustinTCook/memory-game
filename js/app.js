@@ -1,6 +1,8 @@
 "use strict";
 
 const moves = $("#moves");
+const moveCount = $("#move-count");
+const finalTime = $("#final-time");
 const reset = $(".reset");
 
 var counter = 0;
@@ -103,10 +105,6 @@ function checkMatch(){
     hidePair();
 
   handleRating();
-
-  var targeted_popup_class = 'popup-1';
-  console.log(targeted_popup_class);
-  $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
 }
 
 function handleRating(){
@@ -148,7 +146,11 @@ function hidePair(){
 function checkWinCondition(){
   if(deck.matched.length == 16){
     stopInterval();
-    console.log("You win!");
+
+    moveCount[0].textContent = deck.moves;
+    finalTime[0].textContent = counter;
+    var targeted_popup_class = 'popup-1';
+    $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
   }
 }
 
@@ -161,6 +163,7 @@ function tictac(){
 function resetTimer(){
   clearInterval(timer);
   counter = 0;
+  $("#clock").html(counter);
 }
 
 function startInterval(){
@@ -171,16 +174,8 @@ function stopInterval(){
     clearInterval(timer);
 }
 
+// Demo found at http://inspirationalpixels.com/tutorials/custom-popup-modal#step-html
 $(function() {
-    //----- OPEN
-    $('[data-popup-open]').on('click', function(e)  {
-        var targeted_popup_class = 'popup-1';
-        console.log(targeted_popup_class);
-        $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
-
-        e.preventDefault();
-    });
-
     //----- CLOSE
     $('[data-popup-close]').on('click', function(e)  {
         var targeted_popup_class = jQuery(this).attr('data-popup-close');
