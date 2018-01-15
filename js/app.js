@@ -3,7 +3,10 @@
 const moves = $("#moves");
 const moveCount = $("#move-count");
 const finalTime = $("#final-time");
+const stars = $("#stars-remaining");
 const reset = $(".reset");
+const rating = $(".rating");
+
 
 var counter = 0;
 var timer = null;
@@ -11,7 +14,7 @@ var timer = null;
 reset[0].addEventListener('click', function(e){
   resetGame();
 })
-var rating = $(".rating");
+
 
 // Game deck
 const deck = {
@@ -44,6 +47,7 @@ const deck = {
  }
 }
 
+/** Builds initial game by adding event listeners and innerHTML to card elements */
 function buildGame(){
   deck.cards = deck.shuffle(deck.cards);
 
@@ -53,12 +57,17 @@ function buildGame(){
     cards[i].className = "card hidden"
     cards[i].innerHTML = "<i class=\"fa fa-" + deck.cards[i] + "\"></i>"
 
-    cards[i].addEventListener('click', function(e){
-      revealCard(e.target);
+    var evnt = cards[i].addEventListener('click', function(e){
+      /* Check target to prevent bubbling and
+      don't allow more than 2 cards to be shown at a time */
+      if($(e.target).is('li') && deck.opened.length < 2){
+        revealCard(e.target);
+      }
     });
   }
 }
 
+/** Resets game to beginning state */
 function resetGame(){
   deck.cards = deck.shuffle(deck.cards);
 
@@ -78,17 +87,19 @@ function resetGame(){
   resetTimer();
 }
 
+/** card element onClick eventListener. Displays card type*/
 function revealCard(element){
-  element.className = "card revealed";
-  var revealedCard = $(element).children();
+  // Stop false positives on already revealed/matched cards
+  if(deck.opened.includes(element) || deck.matched.includes(element))
+    return;
 
+  element.className = "card revealed";
   deck.opened.push(element);
 
   if(deck.opened.length > 1){
     checkMatch();
   }
-
-  // first move
+  // Start timer on first card reveal
   if(deck.moves === 0)
     startInterval();
 }
@@ -149,6 +160,9 @@ function checkWinCondition(){
 
     moveCount[0].textContent = deck.moves;
     finalTime[0].textContent = counter;
+    stars[0].textContent = $(".fa-star").length;
+
+
     var targeted_popup_class = 'popup-1';
     $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
   }
